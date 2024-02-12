@@ -5,10 +5,10 @@
 #include "task.h"
 #include "list.h"
 #include "schedulers.h"
-#include "schedulers.h"
+#include "cpu.h"
 
 // Global variable for the head of the linked list
-struct Node *g_head = NULL;
+struct node *g_head = NULL;
 
 bool comesBefore(char *a, char *b) { return strcmp(a, b) < 0; }
 
@@ -28,21 +28,36 @@ Task *pickNextTask()
     {
         if (comesBefore(temp->task->name, best_sofar->name))
             best_sofar = temp->task;
-        temp = temp->next;
+        temp = temp->next; //move the current pointer
     }
     // delete the node from list, Task will get deleted later
     delete (&g_head, best_sofar);
     return best_sofar;
 }
 
-//Function to add a new task to the list
+// Function to add a new task to the list
 void add(char *name, int priority, int burst)
 {
-    
+    Task *newTask = (Task *)malloc(sizeof(Task));
+    newTask->name = strdup(name);
+    newTask->priority = priority;
+    newTask->burst = burst;
+    insert(&g_head, newTask);
 }
 
 void schedule()
 {
-    //int time = 0;
-    //printf("Running task csacsd\n");
+    printf("-------------------------------Scheduling FCFS-------------------------------\n");
+
+    struct node *current = g_head; // pointer to traverse the task list
+    int currentTime = 0;           // track the current time
+
+    while (current != NULL)
+    {
+        Task *currTask = pickNextTask(); // get the next task
+        run(currTask, currTask->burst); // run the task for its burst time
+        currentTime += currTask->burst; // increment the current time by task's burst time
+        printf("\tTime is now: %d\n", currentTime);
+        current = g_head; // move to the next task
+    }
 }
