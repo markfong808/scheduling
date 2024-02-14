@@ -18,7 +18,7 @@ bool comesBefore(Task *a, Task *b)
     }
     else
     {
-        return a->priority > b->priority; //task with higher priority come first
+        return a->priority > b->priority; // task with higher priority come first
     }
 }
 
@@ -38,7 +38,7 @@ Task *pickNextTask()
     {
         if (comesBefore(temp->task, best_sofar))
             best_sofar = temp->task;
-        temp = temp->next; // move the current pointer
+        temp = temp->next;
     }
     // delete the node from list, Task will get deleted later
     delete (&g_head, best_sofar);
@@ -65,6 +65,6 @@ void schedule()
         run(currTask, currTask->burst); // run the task for its burst time
         currentTime += currTask->burst; // increment the current time by task's burst time
         printf("\tTime is now: %d\n", currentTime);
-        current = g_head; // reset
+        current = g_head; // reset the current pointer, g_head never moved
     }
 }

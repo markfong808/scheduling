@@ -47,17 +47,27 @@ void add(char *name, int priority, int burst)
 
 void schedule()
 {
-    printf("-------------------------------Scheduling FCFS-------------------------------\n");
-
+    int total_time_with_dispatcher = 0; // Total time taken by all tasks including dispatcher time
+    int total_time_without_dispatcher = 0;
     struct node *current = g_head; // pointer to traverse the task list
     int currentTime = 0;           // track the current time
-
     while (current != NULL)
     {
-        Task *currTask = pickNextTask(); // get the next task
+        Task *currTask = pickNextTask(); 
         run(currTask, currTask->burst); // run the task for its burst time
         currentTime += currTask->burst; // increment the current time by task's burst time
         printf("\tTime is now: %d\n", currentTime);
-        current = g_head; // move to the next task
+        current = g_head;
+
+        // Update total_time_without_dispatcher
+        total_time_without_dispatcher += currTask->burst;
     }
+
+    total_time_with_dispatcher = total_time_without_dispatcher + 1; // Add dispatcher time
+
+    // Calculate CPU utilization
+    float cpu_utilization = calculate_cpu_utilization(total_time_with_dispatcher, total_time_without_dispatcher);
+
+    // Output CPU utilization
+    printf("CPU Utilization: %.2f%%\n", cpu_utilization);
 }

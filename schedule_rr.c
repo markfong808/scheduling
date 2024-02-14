@@ -38,7 +38,6 @@ void add(char *name, int priority, int burst)
     }
 }
 
-
 bool comesBefore(char *a, char *b) { return strcmp(a, b) < 0; }
 Task *pickNextTask()
 {
@@ -54,59 +53,13 @@ Task *pickNextTask()
     {
         if (comesBefore(temp->task->name, best_sofar->name))
             best_sofar = temp->task;
-        temp = temp->next; // move the current pointer
+        temp = temp->next; 
     }
     // delete the node from list, Task will get deleted later
-     delete (&g_head, best_sofar);
+    delete (&g_head, best_sofar);
     return best_sofar;
 }
 
-// void schedule()
-// {
-    
-//     struct node *current = g_head;
-
-//     int currentTime = 0; // track the current time
-//     traverse(current);
-    
-//     while (current != NULL)
-//     {
-//         Task *currTask = pickNextTask();
-//         printf("Picked task: [%s] [%d] [%d]\n", currTask->name, currTask->priority, currTask->burst);
-
-//         if (currTask->burst > QUANTUM )
-//         {
-//             run(currTask, QUANTUM);
-//             //delete (&g_head, currTask);
-//             currentTime += QUANTUM;                  // update the current time by task's burst time
-//             currTask->burst = currTask->burst - QUANTUM; // track the remain time by updating the current burst time
-//             // printf("\tTime is now: %d\n", currentTime);           
-//             // printf("\tremcainTime is now: %d\n", currTask->burst);
-//             current = current->next;
-
-//             //g_head = g_head ->next;
-//         }
-//         else 
-//         {
-//             run(currTask, currTask->burst);
-//             currentTime += currTask->burst;
-//             currTask->burst = currTask->burst - QUANTUM;
-//             // printf("\tTime is now: %d\n", currentTime);
-//             //printf("\tRemain Time is now: %d\n", currTask->burst);
-//             current = current->next;
-//             //current = g_head;
-            
-//             //delete (&g_head, currTask);
-            
-//             }
-//             //current = current->next;
-//             //current = g_head;
-            
-            
-//     }
-// //     traverse(g_head);
-   
-//  }
 void schedule()
 {
 
@@ -138,4 +91,4 @@ void schedule()
             printf("        Time is now: %d\n", time);
         }
     }
- }
+}
