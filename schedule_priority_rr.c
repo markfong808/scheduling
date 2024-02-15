@@ -96,6 +96,9 @@ void add(char *name, int priority, int burst)
 void schedule()
 {
     // traverse(g_head);
+    int total_time_with_dispatcher = 0; // Total time taken by all tasks including dispatcher time
+    int total_time_without_dispatcher = 0;
+    int dispatcher_time = 0;
     int time = 0;
     struct node *current, *temp1, *SelectedTask;
     // outer loop resets cycle to beginning of sorted list if tasks remain after each list rotation
@@ -124,6 +127,8 @@ void schedule()
             {
                 run(current->task, current->task->burst);
                 time += current->task->burst;
+                total_time_with_dispatcher += current->task->burst; // accumulate total time without dispatcher
+                dispatcher_time++;
                 temp1 = current;
                 current = current->next;
                 delete (&g_head, temp1->task);
@@ -133,9 +138,16 @@ void schedule()
                 run(current->task, QUANTUM);
                 time += QUANTUM;
                 current->task->burst -= QUANTUM;
+                total_time_with_dispatcher += QUANTUM;
+                dispatcher_time++;
                 current = current->next;
             }
             printf("        Time is now: %d\n", time);
         }
     }
+    // Calculate CPU utilization
+    double cpu_utilization = (double)(total_time_with_dispatcher) / (total_time_with_dispatcher + dispatcher_time - 1)  * 100;
+
+
+    printf("CPU Utilization: %.2f%%\n", cpu_utilization);
 }

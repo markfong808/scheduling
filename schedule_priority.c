@@ -57,14 +57,25 @@ void add(char *name, int priority, int burst)
 
 void schedule()
 {
+    int total_time_with_dispatcher = 0; // Total time taken by all tasks including dispatcher time
+    int total_time_without_dispatcher = 0;
     struct node *current = g_head; // pointer to traverse the task list
     int currentTime = 0;           // track the current time
+    int dispatcher_time = 0;      // Dispatcher time is 1 unit
+
     while (current != NULL)
     {
         Task *currTask = pickNextTask();
         run(currTask, currTask->burst); // run the task for its burst time
         currentTime += currTask->burst; // increment the current time by task's burst time
         printf("\tTime is now: %d\n", currentTime);
+        total_time_with_dispatcher += currTask->burst; // accumulate total time with dispatcher
         current = g_head; // reset the current pointer, g_head never moved
+        dispatcher_time++;
+
     }
+    // Calculate CPU utilization
+    double cpu_utilization = (double)(total_time_with_dispatcher) / (total_time_with_dispatcher + dispatcher_time - 1)  * 100;
+
+    printf("CPU Utilization: %.3f%%\n", cpu_utilization);
 }
